@@ -1,26 +1,30 @@
 from typing import List
+import heapq
 
 
 class ParkingRequest:
   def __init__(self, start, end):
     self.start = start
     self.end = end
+    self.slot = None
 
-def schedule_parking(requests: List[ParkingRequest]):
+def schedule_parking(requests: List[ParkingRequest], num_slot: int = 1):
   scheduled_requests = []
 
   requests.sort(key=lambda x: x.start)
 
-  last_end_time = 0
+  parking_heap = []
 
   for request in requests:
-    available_slot = find_available_slot(scheduled_requests, request)
+    # Remove expired requests from the heap (end time < request.start time)
+    while parking_heap and parking_heap[0] <= request.start:
+      heapq.heappop(parking_heap)
 
-    if not available_slot:
-      print(f"Rejecting parking request from {request.start} to {request.end}")
-      continue
-
-    scheduled_requests.append(request)
+    if len(parking_heap) < num_slot:
+      heapq.heappush(parking_heap, request.end)
+      scheduled_requests.append(request)
+      request.slot = len(parking_heap)
+      print(f"Parking request from {request.start} to {request.end} (slot {request.slot})")
 
   return scheduled_requests
 
@@ -63,8 +67,8 @@ if __name__ == "__main__":
   for request in requests:
     print(f"From: {request.start} to {request.end}")
 
-  scheduled_requests = schedule_parking(requests)
+  scheduled_requests = schedule_parking(requests, 5)
   print("Total Scheduled Requests:", len(scheduled_requests))
   print("Scheduled Parking Requests:")
   for request in scheduled_requests:
-    print(f"From {request.start} to {request.end}")
+    print(f"From {request.start} to {request.end}, at slot: {request.slot}")
