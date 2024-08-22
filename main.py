@@ -24,7 +24,6 @@ def schedule_parking(requests: List[ParkingRequest], num_slot: int = 1):
       heapq.heappush(parking_heap, request.end)
       scheduled_requests.append(request)
       request.slot = len(parking_heap)
-      print(f"Parking request from {request.start} to {request.end} (slot {request.slot})")
 
   return scheduled_requests
 
@@ -60,6 +59,16 @@ if __name__ == "__main__":
     ParkingRequest(start=12, end=18),
     ParkingRequest(start=20, end=25),
     ParkingRequest(start=22, end=28),
+    ParkingRequest(start=24, end=30),
+    ParkingRequest(start=26, end=32),
+    ParkingRequest(start=28, end=34),
+    ParkingRequest(start=30, end=36),
+    ParkingRequest(start=32, end=38),
+    ParkingRequest(start=34, end=40),
+    ParkingRequest(start=36, end=42),
+    ParkingRequest(start=38, end=44),
+    ParkingRequest(start=40, end=46),
+    ParkingRequest(start=42, end=48),
   ]
 
   print("Requesting Parking requests...")
@@ -71,4 +80,4 @@ if __name__ == "__main__":
   print("Total Scheduled Requests:", len(scheduled_requests))
   print("Scheduled Parking Requests:")
   for request in scheduled_requests:
-    print(f"From {request.start} to {request.end}, at slot: {request.slot}")
+    print(f"Parking request from {request.start} to {request.end} (slot {request.slot})")
